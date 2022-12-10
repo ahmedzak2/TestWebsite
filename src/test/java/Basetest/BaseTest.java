@@ -54,6 +54,7 @@ driver.get("https://applitools.com/");
            devTools.createSession();
            // to enable logs
            devTools.send(Log.enable());
+           // to print the logs to know what happen
            devTools.addListener(Log.entryAdded(), logEntry -> {
                // to spereate the entites
                System.out.println("---------");
@@ -62,6 +63,7 @@ driver.get("https://applitools.com/");
                System.out.println("level "+logEntry.getUrl());
 
            });
+           // to reload the page and check the console
            driver.get("https://the-internet.herokuapp.com/broken_images");
        }
     @Test
