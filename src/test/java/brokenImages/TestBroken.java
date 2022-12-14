@@ -10,4 +10,17 @@ public class TestBroken extends BaseTest {
 startDevTools();
 
     }
+@Test
+    public void tecstLocation(){
+        testmockGeoLocation();
+}
+@Test
+    public void TestByseluimn(){
+TestLocationBySelenium();
+    }
+    @Test
+    public void testNetwork(){
+        doNotEnableRexJonesII();
+        enablesSlowRexJonesII();
+    }
 }

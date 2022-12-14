@@ -6,7 +6,11 @@ import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v106.emulation.Emulation;
 import org.openqa.selenium.devtools.v85.log.Log;
+
+import org.openqa.selenium.devtools.v85.network.Network;
+import org.openqa.selenium.devtools.v85.network.model.ConnectionType;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -14,6 +18,12 @@ import pages.HomePage;
 import pages.Screen;
 import utills.CookieManger;
 import utills.WindowManger;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import static javax.swing.UIManager.put;
 
 
 public class BaseTest {
@@ -63,9 +73,62 @@ driver.get("https://applitools.com/");
                System.out.println("level "+logEntry.getUrl());
 
            });
+
            // to reload the page and check the console
            driver.get("https://the-internet.herokuapp.com/broken_images");
        }
+
+      // to use the geoocation by commann
+    public void TestLocationBySelenium(){
+        DevTools devTools= driver.getDevTools();
+
+        devTools.createSession();
+        devTools.send(Emulation.setGeolocationOverride(Optional.of(52.5043),
+                Optional.of(13.4501),
+                Optional.of(1)));
+        driver.get("https://my-location.org/");
+        driver.quit();
+    }
+       public void testmockGeoLocation(){
+        // to create map to put coordinates
+           Map coordinates = new HashMap();
+
+           {{
+               put("latitude",30.073449049299477);
+               put ("longitude", 31.346835782389807);
+               put("accuracy",1);
+
+           }};
+           driver.get("https://where-am-i.org/");
+
+        // you need to test string code man  and map of location
+        driver.executeCdpCommand(
+                "Emulation.setGeolocationOverride",coordinates);
+//driver.get("https://where-am-i.org/");
+       }
+public void enablesSlowRexJonesII(){
+    DevTools devTools= driver.getDevTools();
+devTools.createSession();
+// to start enable the network  we can send empty value
+    devTools.send(Network.enable(
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()));
+devTools.send(Network.emulateNetworkConditions(
+        false,
+        200,
+        300,
+        2000,
+        // to select the type of network
+        Optional.of(ConnectionType.CELLULAR3G)));
+    driver.get("https://dev-hamza-admin.thewebops.com/login");
+
+    System.out.println("enable slow network +"+driver.getTitle());
+}
+    public void doNotEnableRexJonesII(){
+        driver.get("http://dev-hamza-admin.thewebops.com/");
+        System.out.println("Do Not Enable Network: " + driver.getTitle());
+    }
     @Test
     /*
     public void takeFullpageScreenshot() throws IOException {
